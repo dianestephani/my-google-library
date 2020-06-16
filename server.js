@@ -20,11 +20,11 @@ app.get('/', (request, response) => {
   response.render('pages/index.ejs');
 });
 
-app.get('/new', (request, response) => {
+app.get('/searches/new', (request, response) => {
   response.render('searches/new.ejs');
 })
 
-app.post('/searches', (request, response) => {
+app.post('/searches/new', (request, response) => {
   let query = request.body.search[0];
   let titleOrAuthor = request.body.search[1];
 
