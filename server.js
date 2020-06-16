@@ -52,8 +52,11 @@ app.post('/searches/new', (request, response) => {
 })
 
 function Book(info) {
-  // const placdholderImage = 'https://i.imgur.com/J5LVHEL.jpg';
+  const placeholderImage = 'https://i.imgur.com/J5LVHEL.jpg';
   this.title = info.title ? info.title : 'no title available';
+  this.authors = info.authors ? info.authors : 'no authors available';
+  this.description = info.description ? info.description : 'no description available';
+  this.cover = info.imageLinks.thumbnail ? info.imageLinks.thumbnail : placeholderImage;
 }
 
 app.listen(PORT, () => {
