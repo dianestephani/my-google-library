@@ -18,9 +18,21 @@ app.use(express.urlencoded({
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
 
-
-
+// Routes, as seen in class 13
 app.get('/', getBooks);
+app.get('/books/:book_id', getOneBook);
+app.get('/searches/new', (request, response) => {
+  response.render('searches/new.ejs');
+});
+
+app.post('/details', addBook);
+
+app.get('*', (request, response) => {
+  response.status(200).send('Sorry, cannot find route');
+})
+
+
+
 
 function getBooks(request, response) {
   // retrieve an array of book objects from the database and render index.ejs
@@ -37,7 +49,6 @@ function getBooks(request, response) {
   //   response.render(sql, 'searches/index.ejs');
 }
 
-app.get('/books/:book_id', getOneBook);
 
 function getOneBook(request, response) {
   let myBookId = request.params.book_id;
@@ -52,19 +63,20 @@ function getOneBook(request, response) {
 }
 
 function addBook(request, response) {
+  let myBookId = request.params.book_id
   let {title, authors, description, thumbnail} = request.body;
   let sql = `INSERT INTO books (title, authors, description, thumbnail) VALUES ($1, $2, $3, $4) RETURNING ID;`;
   let safeValues = [title, authors, description, thumbnail];
   client.query(sql, safeValues)
     .then(results => {
       console.log(results.rows);
-      response.redirect(`books/${id}`);
+      response.redirect(`books/${myBookId}`);
     })
 }
 
-app.get('/searches/new', (request, response) => {
-  response.render('searches/new.ejs');
-})
+// app.get('/searches/new', (request, response) => {
+//   response.render('searches/new.ejs');
+// })
 
 app.post('/searches/new', (request, response) => {
   let query = request.body.search[0];
